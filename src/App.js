@@ -1,16 +1,25 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+
+import Header from './Header/Header';
+import Graph from './Graph/Graph';
+import DiffView from './DiffView/DiffView';
 
 class App extends Component {
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <p>Twitter Follower Info</p>
-        </header>
+
+        <Header />
+
+        <Graph />
+
+        <DiffView />
+
       </div>
     );
   }
 }
 
-export default App;
+export default App
