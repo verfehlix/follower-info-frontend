@@ -1,15 +1,14 @@
-.Graph {
-    
-    grid-area: Graph;
+.FollowerList {
+    grid-area: FollowerList;
     
     padding: 1rem;
 }
 
-.GraphContainer {
+.FollowerListContainer {
     width: 100%;
     height: 100%;
-    
-    background-color: tomato;
+
+    background-color: mediumpurple;
 
     border: 1px solid  #282c34;
     border-radius: 0.5rem;

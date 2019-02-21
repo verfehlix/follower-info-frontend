@@ -4,6 +4,7 @@ import './App.css'
 import Header from './Header/Header';
 import Graph from './Graph/Graph';
 import DiffView from './DiffView/DiffView';
+import FollowerList from './FollowerList/FollowerList';
 
 import axios from 'axios';
 
@@ -16,7 +17,6 @@ const GET_FOLLOWER_INFO = `
     followerInfo {
       timestamp
       followerCount
-      followerList
     }
   }
 `;
@@ -36,11 +36,15 @@ class App extends Component {
     return (
       <div className="App">
 
-        <Header />
+        <div className="ComponentContainer">
+          <Header />
 
-        <Graph />
+          <Graph />
 
-        <DiffView />
+          <DiffView />
+
+          <FollowerList />
+        </div>
 
       </div>
     );
@@ -58,7 +62,9 @@ class App extends Component {
           followerInfo: result.data.followerInfo,
           errors: result.data.errors
         }))
-      );
+      ).catch(err => {
+        console.error(err)
+      })
   };
 }
 

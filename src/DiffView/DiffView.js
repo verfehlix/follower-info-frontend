@@ -5,8 +5,10 @@ class DiffView extends Component {
 
     render() {
         return (
-            <div className="DiffViewContainer">
-                <p>Soon a DiffView will be here</p>
+            <div className="DiffView">
+                <div className="DiffViewContainer">
+                    <p>Soon a DiffView will be here</p>
+                </div>
             </div>
         )
     }

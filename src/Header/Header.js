@@ -6,7 +6,9 @@ class Header extends Component {
     render() {
         return (
             <header className="Header">
-                <p>Twitter Follower Info</p>
+                <div className="HeaderTextContainer">
+                    <p>Twitter Follower Info</p>
+                </div>
             </header>
         )
     }
