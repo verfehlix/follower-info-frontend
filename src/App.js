@@ -9,13 +9,13 @@ import FollowerList from './FollowerList/FollowerList';
 import axios from 'axios';
 
 const axiosGraphQL = axios.create({
-  baseURL: 'http://localhost:8080/graphql',
+  baseURL: 'http://192.168.2.112:8080/graphql',
 });
 
 const GET_FOLLOWER_INFO = `
   {
     followerInfo(
-      startTimestamp: "2019-02-21 00:00:00",
+      startTimestamp: "2019-01-01 00:00:00",
       endTimestamp: "2019-02-21 23:59:59"
     ) {
       timestamp
@@ -34,8 +34,6 @@ class App extends Component {
   }
 
   render() {
-
-    const { followerInfo } = this.state;
 
     return (
       <div className="App">

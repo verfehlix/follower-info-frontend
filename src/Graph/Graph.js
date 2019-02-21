@@ -2,38 +2,33 @@ import React, { Component } from 'react'
 import './Graph.css'
 
 import {
-    FlexibleXYPlot, LineSeries, VerticalGridLines,
+    FlexibleXYPlot,
+    LineSeries,
+    VerticalGridLines,
     HorizontalGridLines,
     XAxis,
     Crosshair,
+    Highlight,
     YAxis
 } from 'react-vis';
+
 import '../../node_modules/react-vis/dist/style.css';
 
-const data = [
-    { x: 0, y: 0 },
-    { x: 1, y: 1 },
-    { x: 2, y: 2 },
-    { x: 3, y: 3 },
-    { x: 4, y: 4 },
-    { x: 5, y: 2 },
-    { x: 6, y: 3 },
-    { x: 7, y: 7 },
-    { x: 8, y: 8 },
-    { x: 9, y: 9 }
-];
+import moment from 'moment'
 
 class Graph extends Component {
 
     state = {
+        lastDrawLocation: null,
         value: false
     }
 
     render() {
 
-        const { value } = this.state
+        const { value, lastDrawLocation } = this.state
 
         // transform data
+        // TODO: move this out of the render function... 
         const data = this.props.data || []
         const transformedData = data.map(dataPoint => {
             return {
@@ -43,14 +38,29 @@ class Graph extends Component {
         }).reverse()
 
         // get max of array
-        const max = Math.max.apply(Math, transformedData.map(dataPoint => dataPoint.y))
+        // TODO: re-enable this custom yDomain as "default" after zoom-reset
+        // const max = Math.max.apply(Math, transformedData.map(dataPoint => dataPoint.y))
 
         return (
             <div className="Graph">
                 <div className="GraphContainer">
                     <FlexibleXYPlot
                         onMouseLeave={() => this.setState({ value: false })}
-                        yDomain={[0, max + 10]}
+                        animation
+                        xDomain={
+                            lastDrawLocation && [
+                                lastDrawLocation.left,
+                                lastDrawLocation.right
+                            ]
+                        }
+                        yDomain={
+                            lastDrawLocation && [
+                                lastDrawLocation.bottom,
+                                lastDrawLocation.top
+                            ]
+                        }
+                        // TODO: re-enable this custom yDomain as "default" after zoom-reset
+                        // yDomain={[0, max + 10]}
                         xType="time">
 
                         {/* Grid */}
@@ -63,6 +73,8 @@ class Graph extends Component {
 
                         {/* Line Series */}
                         <LineSeries
+                            curve="curveStepBefore"
+                            strokeWidth="5px"
                             onNearestX={(d) => this.setState({
                                 value: d
                             })}
@@ -71,15 +83,30 @@ class Graph extends Component {
 
                         {/* CrossHair */}
                         {value && <Crosshair values={[value]}>
-                            <div class="CrossHair">
-                                <p>{new Date(value.x).toString()}</p>
-                                <p>{value.y}</p>
+                            <div className="CrossHair">
+                                <h4>{moment(new Date(value.x)).format('DD.MM.YYYY')}</h4>
+                                <h3>{moment(new Date(value.x)).format('HH:mm')}</h3>
+                                <h1>{value.y}</h1>
                             </div>
                         </Crosshair>}
+
+                        {/* Highlight To Zoom */}
+                        <Highlight
+                            onBrushEnd={area => this.setState({ lastDrawLocation: area })}
+                            onDrag={area => {
+                                this.setState({
+                                    lastDrawLocation: {
+                                        bottom: lastDrawLocation.bottom + (area.top - area.bottom),
+                                        left: lastDrawLocation.left - (area.right - area.left),
+                                        right: lastDrawLocation.right - (area.right - area.left),
+                                        top: lastDrawLocation.top + (area.top - area.bottom)
+                                    }
+                                });
+                            }}
+                        />
                     </FlexibleXYPlot>
                 </div>
             </div>
-
         )
     }
 }
