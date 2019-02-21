@@ -14,9 +14,13 @@ const axiosGraphQL = axios.create({
 
 const GET_FOLLOWER_INFO = `
   {
-    followerInfo {
+    followerInfo(
+      startTimestamp: "2019-02-21 00:00:00",
+      endTimestamp: "2019-02-21 23:59:59"
+    ) {
       timestamp
       followerCount
+      followerList
     }
   }
 `;
@@ -35,11 +39,10 @@ class App extends Component {
 
     return (
       <div className="App">
-
         <div className="ComponentContainer">
           <Header />
 
-          <Graph />
+          <Graph data={this.state.followerInfo} />
 
           <DiffView />
 
@@ -59,8 +62,8 @@ class App extends Component {
       })
       .then(result =>
         this.setState(() => ({
-          followerInfo: result.data.followerInfo,
-          errors: result.data.errors
+          followerInfo: result.data.data.followerInfo.reverse(),
+          errors: result.data.data.errors
         }))
       ).catch(err => {
         console.error(err)
